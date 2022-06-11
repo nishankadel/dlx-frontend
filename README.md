@@ -1,8 +1,25 @@
-# Getting Started with Create React App
+# My MERN stack Final Year Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can find this project live on [Drug Loft Xpress](https://github.com/nishankadel/dlx-frontend).
 
-## Available Scripts
+## About this project.
+
+This is the online medical platform.
+
+### Features:
+
+`*) feature One`
+
+## Run this project on your local machine
+
+### Clone this project:
+
+`https://github.com/nishankadel/dlx-frontend.git`
+
+### Install dependencies:
+
+`1) dep one `
+`2) dep two `
 
 In the project directory, you can run:
 

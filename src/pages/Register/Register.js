@@ -1,104 +1,190 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import AuthButton from "../../components/AuthComponent/AuthButton";
 import AuthField from "../../components/AuthComponent/AuthField";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, register } from "../../redux/features/auth/authSlice";
+import Spinner from "../../components/Spinner/Spinner";
 
 const Register = () => {
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
+  const [fulladdress, setFullAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector(selectUser);
+
+  const formData = {
+    fullname,
+    email,
+    phonenumber,
+    fulladdress,
+    password,
+    confirmpassword,
+    dob,
+    gender,
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      fullname &&
+      email &&
+      phonenumber &&
+      fulladdress &&
+      password &&
+      confirmpassword &&
+      dob &&
+      gender
+    ) {
+      dispatch(register({ formData, navigate, toast }));
+    }
+  };
+
   return (
     <>
-      <div class="text-center mt-5">
-        <div class="flex items-center justify-center">
+      {user.isLoading && <Spinner />}
+      <div className="text-center mt-5">
+        <div className="flex items-center justify-center">
           <Link to="/">
             <img
-              class="w-12 h-12"
+              className="w-12 h-12"
               src="/logo.png"
               alt="dlx logo"
               draggable="false"
             />
           </Link>
         </div>
-        <h2 class="text-2xl tracking-tight">Register Your Account</h2>
-        <span class="text-sm">
+        <h2 className="text-2xl tracking-tight">Register Your Account</h2>
+        <span className="text-sm">
           or &nbsp;
-          <Link to="/auth/login" class="text-blue-500">
+          <Link to="/auth/login" className="text-blue-500">
             login to your account
           </Link>
         </span>
       </div>
-      <div class="flex justify-center my-1 mx-4 md:mx-0">
-        <form class="w-full max-w-xl bg-white rounded-lg shadow-md p-6">
-          <div class="flex flex-wrap -mx-3 mb-6">
+      <div className="flex justify-center my-1 mx-4 md:mx-0">
+        <form
+          className="w-full max-w-xl bg-white rounded-lg shadow-md p-6"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex flex-wrap -mx-3 mb-6">
             <AuthField
               label="Full Name"
               type="fullname"
               name="text"
-              fn={""}
-              value="Nishan Kadel"
+              placeholder="E.g. Nishan Kadel"
+              fn={(e) => setFullname(e.target.value)}
+              value={fullname}
             />
             <AuthField
               label="Email Address"
               type="email"
               name="email"
-              fn={""}
-              value="nishankadel39@gmail.com"
+              placeholder="E.g. nishankadel39@gmail.com"
+              fn={(e) => setEmail(e.target.value)}
+              value={email}
             />
             <AuthField
               label="Phone Number"
               type="number"
               name="phonenumber"
-              fn={""}
-              value="9817029878"
+              placeholder="E.g. 98*******"
+              fn={(e) => setPhonenumber(e.target.value)}
+              value={phonenumber}
             />
             <AuthField
-              label="Email Address"
-              type="email"
-              name="email"
-              fn={""}
-              value="sds"
+              label="Date of Birth"
+              type="date"
+              name="dob"
+              fn={(e) => setDob(e.target.value)}
+              value={dob}
             />
+            <div
+              className="grid w-[40rem] grid-cols-4 space-x-2 rounded-xl mb-1 bg-gray-200 p-2"
+              x-data="app"
+            >
+              <div>
+                <label
+                  htmlFor="gender"
+                  className="block cursor-pointer select-none rounded-xl p-2 text-center bg-gray-500 text-white "
+                >
+                  Gender
+                </label>
+              </div>
+              <label className="flex radio p-2 cursor-pointer">
+                <input
+                  className="my-auto transform scale-125"
+                  type="radio"
+                  id="male"
+                  name="gender"
+                  value="Male"
+                  onChange={(e) => {
+                    setGender(e.target.value);
+                  }}
+                />
+                <div className="title px-2">Male</div>
+              </label>
+              <label className="flex radio p-2 cursor-pointer">
+                <input
+                  className="my-auto transform scale-125"
+                  type="radio"
+                  id="female"
+                  name="gender"
+                  value="Female"
+                  onChange={(e) => {
+                    setGender(e.target.value);
+                  }}
+                />
+                <div className="title px-2">Female</div>
+              </label>
+              <label className="flex radio p-2 cursor-pointer">
+                <input
+                  className="my-auto transform scale-125"
+                  type="radio"
+                  id="other"
+                  name="gender"
+                  value="Other"
+                  onChange={(e) => {
+                    setGender(e.target.value);
+                  }}
+                />
+                <div className="title px-2">Other</div>
+              </label>
+            </div>
+
             <AuthField
-              label="Province"
+              label="Full Address"
               type="text"
-              name="province"
-              fn={""}
-              value="Province 1"
-            />{" "}
-            <AuthField
-              label="District"
-              type="text"
-              name="district"
-              fn={""}
-              value="Sunsari"
-            />{" "}
-            <AuthField
-              label="City"
-              type="text"
-              name="city"
-              fn={""}
-              value="Itahari"
-            />
-            <AuthField
-              label="Area"
-              type="text"
-              name="area"
-              fn={""}
-              value="Buspark"
+              name="fulladdress"
+              placeholder="E.g. Buspark, Itahari-9, Sunsari, Nepal"
+              fn={(e) => setFullAddress(e.target.value)}
+              value={fulladdress}
             />
             <AuthField
               label="Password"
               type="password"
               name="password"
-              fn={""}
-              value="123456"
+              placeholder="E.g. *********"
+              fn={(e) => setPassword(e.target.value)}
+              value={password}
             />
             <AuthField
               label="Confirm Password"
               type="password"
               name="confirmpassword"
-              fn={""}
-              value="123456"
+              placeholder="E.g. *********"
+              fn={(e) => setConfirmpassword(e.target.value)}
+              value={confirmpassword}
             />
-            <div class="w-full md:w-full px-3 mb-6">
+            <div className="w-full md:w-full px-3 mb-6">
               <AuthButton label="Sign Up" />
             </div>
           </div>

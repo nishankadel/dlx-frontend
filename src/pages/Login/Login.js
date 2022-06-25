@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthButton from "../../components/AuthComponent/AuthButton";
 import AuthField from "../../components/AuthComponent/AuthField";
@@ -19,6 +19,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

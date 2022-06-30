@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AddToFavorite from "../AddToFavorite/AddToFavorite";
 // import { Link } from "react-router-dom";
 
 const ProductCard = ({ name, brand, price, image, onStock, id }) => {
@@ -31,7 +32,6 @@ const ProductCard = ({ name, brand, price, image, onStock, id }) => {
             <p className="text-red-700 mb-2 mt-3 md:ml-4">Out of Stock</p>
           ) : (
             <div>
-              <input type="text" name="product_id" hidden />
               <button
                 type="submit"
                 className="p-2 pl-3 mt-2 pr-3 bg-transparent border-2 border-indigo-500 text-indigo-500 text-sm rounded-lg hover:bg-indigo-500 hover:text-gray-100 focus:border-4 focus:border-indigo-300"
@@ -41,15 +41,14 @@ const ProductCard = ({ name, brand, price, image, onStock, id }) => {
             </div>
           )}
 
-          <form action="/product/add-favourite" method="post">
-            <input type="text" name="product_id" hidden />
-            <button
-              type="submit"
-              className="p-2 mt-5 pl-3 pr-3 bg-transparent border-2 border-red-500 text-red-500 text-sm rounded-lg hover:bg-red-500 hover:text-gray-100 focus:border-4 focus:border-red-300"
-            >
-              Favourite <i className="fa-solid fa-heart"></i>
-            </button>
-          </form>
+          {/* <button
+            type="submit"
+            className="p-2 mt-5 pl-3 pr-3 bg-transparent border-2 border-red-500 text-red-500 text-sm rounded-lg hover:bg-red-500 hover:text-gray-100 focus:border-4 focus:border-red-300"
+          >
+            Favourite <i className="fa-solid fa-heart"></i>
+          </button> */}
+
+          <AddToFavorite productId={id} />
         </div>
       </div>
     </>

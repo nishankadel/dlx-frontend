@@ -14,6 +14,7 @@ import AllProducts from "./pages/Products/AllProducts";
 import SingleProduct from "./pages/Products/SingleProduct";
 import Register from "./pages/Register/Register";
 import Profile from "./pages/User/Profile";
+import Favorites from "./pages/Favorites/Favorites";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/single-blog/:id" element={<SingleBlog />} />
           <Route path="/single-product/:id" element={<SingleProduct />} />
           <Route path="/user/profile" element={<Profile />} />
+          <Route path="/favourites" element={<Favorites />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

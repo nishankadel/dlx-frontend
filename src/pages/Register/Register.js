@@ -3,9 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthButton from "../../components/AuthComponent/AuthButton";
 import AuthField from "../../components/AuthComponent/AuthField";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser, register } from "../../redux/features/auth/authSlice";
 import Spinner from "../../components/Spinner/Spinner";
+import axios from "axios";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -17,20 +16,7 @@ const Register = () => {
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
-
-  const formData = {
-    fullname,
-    email,
-    phonenumber,
-    fulladdress,
-    password,
-    confirmpassword,
-    dob,
-    gender,
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,13 +30,37 @@ const Register = () => {
       dob &&
       gender
     ) {
-      dispatch(register({ formData, navigate, toast }));
+      axios
+        .post("http://localhost:8000/api/auth/register", {
+          fullname,
+          email,
+          phonenumber,
+          fulladdress,
+          password,
+          confirmpassword,
+          dob,
+          gender,
+        })
+        .then((res) => {
+          if (res.data.success === true) {
+            localStorage.setItem("user-token", JSON.stringify(res.data.token));
+            localStorage.setItem("user-profile", JSON.stringify(res.data.user));
+            navigate("/auth/login");
+            toast.success(res.data.message);
+          }
+          if (res.data.success === false) {
+            navigate("/auth/register");
+            toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
   return (
     <>
-      {user.isLoading && <Spinner />}
       <div className="text-center mt-5">
         <div className="flex items-center justify-center">
           <Link to="/">

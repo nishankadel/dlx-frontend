@@ -1,14 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { selectUser } from "../../redux/features/auth/authSlice";
 import Spinner from "../Spinner/Spinner";
 const HomeCarousel = () => {
-  const userData = useSelector(selectUser);
-
+  const token = JSON.parse(localStorage.getItem("user-token"));
   return (
     <>
-      {userData.isLoading && <Spinner />}
       <div className="relative bg-white overflow-hidden">
         <div className="pt-16 pb-80 sm:pt-24 sm:pb-40 lg:pt-40 lg:pb-48">
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static">
@@ -20,7 +16,6 @@ const HomeCarousel = () => {
             </div>
             <div>
               <div className="mt-10">
-                {/* Decorative image grid */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none lg:absolute lg:inset-y-0 lg:max-w-7xl lg:mx-auto lg:w-full"
@@ -86,7 +81,7 @@ const HomeCarousel = () => {
                   </div>
                 </div>
 
-                {userData.isLoggedIn ? (
+                {token ? (
                   <Link
                     to="/all-products"
                     className="inline-block text-center bg-green-600 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-green-700"

@@ -1,35 +1,43 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { getUser, profile } from "../../redux/features/profile/profileSlice";
 import Login from "../../pages/Login/Login";
 import Spinner from "../../components/Spinner/Spinner";
-import { selectUser } from "../../redux/features/auth/authSlice";
+import axios from "axios";
 
 const Profile = () => {
-  const userProfile = useSelector(getUser);
-  const userData = useSelector(selectUser);
-
-  const dispatch = useDispatch();
-
-  const userInfo = userProfile.profile;
-
-  const token = JSON.parse(localStorage.getItem("profile"));
+  const token = JSON.parse(localStorage.getItem("user-token"));
+  const [userInfo, setUserInfo] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(profile(token));
+    setLoading(true);
+    axios
+      .get("http://localhost:8000/api/user/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        if (res.data.success === true) {
+          setUserInfo(res.data.user);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
   return (
     <>
-      {userProfile.isLoading && <Spinner />}
-      {userData.isLoggedIn && userInfo ? (
+      {loading && <Spinner />}
+      {token && userInfo ? (
         <div className="h-full mt-5">
           <div className="border-b-2 block md:flex">
             <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
               <div className="flex justify-between">
                 <span className="text-xl font-semibold block">
-                  {userInfo.user.userType} Profile
+                  {userInfo.userType} Profile
                 </span>
                 <a
                   href="/user/edit-profile"
@@ -47,7 +55,7 @@ const Profile = () => {
                     width: "200px",
                     height: "200px",
                   }}
-                  src={userInfo.user.avatar}
+                  src={userInfo.avatar}
                   alt="user_pic"
                 />
               </div>
@@ -79,7 +87,7 @@ const Profile = () => {
                       id="username"
                       className="border-1 rounded-r px-4 py-2 w-full"
                       type="text"
-                      value={userInfo.user.fullname}
+                      value={userInfo.fullname}
                     />
                   </div>
                 </div>
@@ -95,7 +103,7 @@ const Profile = () => {
                     id="email"
                     className="border-1 rounded-r px-4 py-2 w-full"
                     type="email"
-                    value={userInfo.user.email}
+                    value={userInfo.email}
                   />
                 </div>
                 <div className="pb-6">
@@ -111,7 +119,7 @@ const Profile = () => {
                       id="username"
                       className="border-1 rounded-r px-4 py-2 w-full"
                       type="text"
-                      value={userInfo.user.phonenumber}
+                      value={userInfo.phonenumber}
                     />
                   </div>
                 </div>
@@ -128,7 +136,7 @@ const Profile = () => {
                       id="username"
                       className="border-1 rounded-r px-4 py-2 w-full"
                       type="text"
-                      value={userInfo.user.fulladdress}
+                      value={userInfo.fulladdress}
                     />
                   </div>
                 </div>
@@ -145,7 +153,7 @@ const Profile = () => {
                       id="username"
                       className="border-1 rounded-r px-4 py-2 w-full"
                       type="text"
-                      value={userInfo.user.dob}
+                      value={userInfo.dob}
                     />
                   </div>
                 </div>
@@ -162,7 +170,7 @@ const Profile = () => {
                       id="username"
                       className="border-1 rounded-r px-4 py-2 w-full"
                       type="text"
-                      value={userInfo.user.gender}
+                      value={userInfo.gender}
                     />
                   </div>
                 </div>
@@ -179,7 +187,7 @@ const Profile = () => {
                       id="username"
                       className="border-1 rounded-r px-4 py-2 w-full"
                       type="text"
-                      value={moment(userInfo.user.createdAt).fromNow()}
+                      value={moment(userInfo.createdAt).fromNow()}
                     />
                   </div>
                 </div>

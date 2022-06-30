@@ -1,12 +1,16 @@
 import React from "react";
+import FeatureCard from "../../components/FeatureCard/FeatureCard";
 import HomeCarousel from "../../components/HomeCarousel/HomeCarousel";
+import ShowCaseBlogs from "../../components/ShowCaseBlogs/ShowCaseBlogs";
+import ShowCaseProducts from "../../components/ShowCaseProducts/ShowCaseProducts";
 
 const Home = () => {
-  const data = JSON.parse(localStorage.getItem("persist:dlx"));
-  console.log(data);
   return (
     <>
       <HomeCarousel />
+      <ShowCaseProducts title="New Medicines" />
+      <FeatureCard />
+      <ShowCaseBlogs title="New Blogs" />
     </>
   );
 };

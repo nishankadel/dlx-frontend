@@ -1,27 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Disclosure, Menu } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setLogout } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 // import "./navbar.css"
 
 const NavBar = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector(selectUser);
+  const profile = JSON.parse(localStorage.getItem("user-profile"));
 
   const handleLogout = () => {
-    dispatch(setLogout());
+    localStorage.removeItem("user-token");
+    localStorage.removeItem("user-profile");
     navigate("/");
     toast.success("Logged out successfully");
   };
-
-  useEffect(() => {
-    handleLogout();
-  }, []);
 
   return (
     <>
@@ -113,7 +107,8 @@ const NavBar = () => {
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button> */}
-                  <button
+                  <Link
+                    to="/favourites"
                     type="button"
                     className=" text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                   >
@@ -132,7 +127,7 @@ const NavBar = () => {
                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                       />
                     </svg>
-                  </button>
+                  </Link>
                   <button
                     type="button"
                     className=" text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white ml-3"
@@ -156,7 +151,7 @@ const NavBar = () => {
                   {/* Cart ko button haru yaha hai  */}
                   {/* Profile dropdown */}
 
-                  {user.isLoggedIn ? (
+                  {profile ? (
                     <div className="flex">
                       <Menu as="div" className="ml-7 relative">
                         <div>
@@ -165,7 +160,7 @@ const NavBar = () => {
                             <Link to="/user/profile">
                               <img
                                 className="h-8 w-8 rounded-full"
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                src={profile.avatar}
                                 alt=""
                               />
                             </Link>

@@ -1,36 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthButton from "../../components/AuthComponent/AuthButton";
 import AuthField from "../../components/AuthComponent/AuthField";
-import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { login, selectUser } from "../../redux/features/auth/authSlice";
 import Spinner from "../../components/Spinner/Spinner";
+import axios from "axios";
+import ReactGoogleLogin from "../../components/ReactGoogleLogin/ReactGoogleLogin";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("nishankadel39@gmail.com");
+  const [password, setPassword] = useState("User@9817");
+  const [loading, setLoading] = useState(false);
 
-  const formData = {
-    email,
-    password,
-  };
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (email && password) {
-      dispatch(login({ formData, navigate, toast }));
+      setLoading(true);
+      axios
+        .post("http://localhost:8000/api/auth/login", {
+          email,
+          password,
+        })
+        .then((res) => {
+          if (res.data.success === true) {
+            localStorage.setItem("user-token", JSON.stringify(res.data.token));
+            localStorage.setItem("user-profile", JSON.stringify(res.data.user));
+            navigate("/");
+            toast.success(res.data.message);
+          }
+          if (res.data.success === false) {
+            navigate("/auth/login");
+            toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
   return (
     <>
-      {user.isLoading && <Spinner />}
+      {loading && <Spinner />}
       <div className="text-center mt-14">
         <div className="flex items-center justify-center">
           <Link to="/">
@@ -96,12 +112,10 @@ const Login = () => {
             <div className="flex items-center w-full mt-2">
               <div className="w-full md:w-1/3 px-3 pt-4 mx-2 border-t border-gray-400"></div>
               <div className="w-full md:w-1/3 px-3 pt-4 mx-2">
-                <button
-                  type="submit"
-                  className="appearance-none flex items-center justify-center  w-full bg-gray-100 text-gray-700 shadow border border-gray-500 rounded-lg py-3 px-3 leading-tight hover:bg-gray-200 hover:text-gray-700 focus:outline-none"
-                >
-                  <i className=" h-6 text-xl w-6 fill-current text-red-700 fa-brands fa-google"></i>
-                </button>
+               
+                
+                <ReactGoogleLogin/>
+
               </div>
               <div className="w-full md:w-1/3 px-3 pt-4 mx-2 border-t border-gray-400"></div>
             </div>

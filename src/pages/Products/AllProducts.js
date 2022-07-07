@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Spinner from "../../components/Spinner/Spinner";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -34,6 +35,11 @@ const AllProducts = () => {
   return (
     <>
       {loading && <Spinner />}
+      <SearchBar
+        router="product"
+        SearchedBar="Search result for Medicial Products"
+      />
+
       <section className="text-gray-600">
         <div className="container px-3 py-3 mx-auto">
           <div className="flex flex-wrap w-full mb-8">
@@ -44,7 +50,9 @@ const AllProducts = () => {
               <div className="h-1 w-20 bg-indigo-500 rounded"></div>
             </div>
           </div>
+
           <div className="flex flex-wrap -m-4">
+            {/* <ProductCard /> */}
             {products.map((product) => (
               <ProductCard
                 key={product._id}

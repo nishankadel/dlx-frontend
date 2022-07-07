@@ -15,13 +15,25 @@ import SingleProduct from "./pages/Products/SingleProduct";
 import Register from "./pages/Register/Register";
 import Profile from "./pages/User/Profile";
 import Favorites from "./pages/Favorites/Favorites";
+import Cart from "./pages/Cart/Cart";
 
 const App = () => {
   return (
     <>
       <Router>
         <Header />
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          theme="dark"
+          pauseOnFocusLoss
+          draggable={false}
+          pauseOnHover={false}
+        />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth/login" element={<Login />} />
@@ -34,6 +46,7 @@ const App = () => {
           <Route path="/single-product/:id" element={<SingleProduct />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/favourites" element={<Favorites />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

@@ -2,6 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import BlogCard from "../../components/BlogCard/BlogCard";
+import SearchBar from "../../components/SearchBar/SearchBar";
 import Spinner from "../../components/Spinner/Spinner";
 
 const AllBlogs = () => {
@@ -33,6 +34,8 @@ const AllBlogs = () => {
   return (
     <>
       {loading && <Spinner />}
+
+      <SearchBar router="blog" SearchedBar="Search Result for Blogs" />
 
       <section className="py-4 bg-gray-100">
         <div className="container mx-auto">

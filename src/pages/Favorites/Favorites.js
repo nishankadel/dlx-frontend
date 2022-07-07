@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import AddToCart from "../../components/AddToCart/AddToCart";
 import Spinner from "../../components/Spinner/Spinner";
 
 const Favorites = () => {
@@ -71,7 +72,7 @@ const Favorites = () => {
                   <tr className="h-12 uppercase">
                     <th className="hidden md:table-cell"></th>
                     <th className="text-left">Products</th>
-                    <th className="text-right">Total price</th>
+                    <th className="text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -109,12 +110,10 @@ const Favorites = () => {
                       <td className="text-right">
                         {/* if stock xaena vane loop  */}
                         {favorite.productId.onStock > 0 ? (
-                          <button
-                            type="submit"
-                            className="p-2 pl-3 mt-2 pr-3 bg-transparent border-2 border-indigo-500 text-indigo-500 text-sm rounded-lg hover:bg-indigo-500 hover:text-gray-100 focus:border-4 focus:border-indigo-300"
-                          >
-                            Add To Cart
-                          </button>
+                          <AddToCart
+                            navTo="/favourites"
+                            productId={favorite.productId._id}
+                          />
                         ) : (
                           <p className="text-red-700 mb-2 md:ml-4">
                             Out of Stock
@@ -144,12 +143,12 @@ const Favorites = () => {
               </h3>
               <p className="text-gray-600 my-2">Add to favourite first.</p>
               <div className="py-10 text-center">
-                <a
-                  href="/product/all-products"
+                <Link
+                  to="/all-products"
                   className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3"
                 >
                   Explore Products
-                </a>
+                </Link>
               </div>
             </div>
           </div>

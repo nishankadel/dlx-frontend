@@ -1,12 +1,21 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Contact = () => {
   const [feedback, setFeedback] = useState("");
+  const profile = JSON.parse(localStorage.getItem("user-profile"));
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(feedback);
-    setFeedback("")
+    if (profile) {
+      e.preventDefault();
+      console.log(feedback);
+    } else {
+      toast.error("Please login to submit feedback");
+      navigate("/auth/login");
+    }
   };
 
   return (

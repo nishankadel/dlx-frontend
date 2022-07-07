@@ -3,16 +3,17 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const AddToFavorite = ({ productId, navTo }) => {
+const AddToCart = ({ productId, navTo }) => {
   const profile = JSON.parse(localStorage.getItem("user-profile"));
   const token = JSON.parse(localStorage.getItem("user-token"));
 
   const navigate = useNavigate();
-  const handleAddToFavorite = async () => {
+
+  const handleAddToCart = async () => {
     if (profile) {
       axios
         .post(
-          `http://localhost:8000/api/product/add-to-favorite`,
+          `http://localhost:8000/api/product/add-to-cart`,
           { productId, userId: profile._id },
           {
             headers: {
@@ -42,15 +43,15 @@ const AddToFavorite = ({ productId, navTo }) => {
     <>
       <button
         onClick={() => {
-          handleAddToFavorite();
+          handleAddToCart();
         }}
         type="submit"
-        className="p-2 mt-5 pl-3 pr-3 bg-transparent border-2 border-red-500 text-red-500 text-sm rounded-lg hover:bg-red-500 hover:text-gray-100 focus:border-4 focus:border-red-300"
+        className="p-2 pl-3 mt-2 pr-3 bg-transparent border-2 border-indigo-500 text-indigo-500 text-sm rounded-lg hover:bg-indigo-500 hover:text-gray-100 focus:border-4 focus:border-indigo-300"
       >
-        Favourite <i className="fa-solid fa-heart"></i>
+        Add To Cart
       </button>
     </>
   );
 };
 
-export default AddToFavorite;
+export default AddToCart;

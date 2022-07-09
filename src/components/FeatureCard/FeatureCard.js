@@ -154,40 +154,40 @@ const FeatureCard = () => {
           </div>
           <div className="flex flex-wrap -m-4">
             <div className="lg:w-1/4 p-4 w-1/2">
-              <a className="block relative h-48 rounded overflow-hidden">
+              <p className="block relative h-48 rounded overflow-hidden">
                 <img
                   alt="ecommerce"
                   className="object-cover object-center w-full h-full block"
                   src="https://www.beiersdorf.com/~/media/Beiersdorf/brands/brands/nivea/nivea-product-teaser.jpg?mh=1200&mw=1200"
                 />
-              </a>
+              </p>
             </div>
             <div className="lg:w-1/4 p-4 w-1/2">
-              <a className="block relative h-48 rounded overflow-hidden">
+              <p className="block relative h-48 rounded overflow-hidden">
                 <img
                   alt="ecommerce"
                   className="object-cover object-center w-full h-full block"
                   src="https://imageio.forbes.com/i-forbesimg/media/lists/companies/medtronic_416x416.jpg?format=jpg&height=416&width=416&fit=bounds"
                 />
-              </a>
+              </p>
             </div>
             <div className="lg:w-1/4 p-4 w-1/2">
-              <a className="block relative h-48 rounded overflow-hidden">
+              <p className="block relative h-48 rounded overflow-hidden">
                 <img
                   alt="ecommerce"
                   className="object-cover object-center w-full h-full block"
                   src="https://jnj-content-lab.brightspotcdn.com/dims4/default/06ca57e/2147483647/strip/true/crop/1200x630+0+285/resize/1200x630!/quality/90/?url=http%3A%2F%2Fjnj-brightspot.s3.amazonaws.com%2Fdd%2F18%2Feab18fbe4487b47b33a9dbf7a65a%2Ffb-logo-1200x1200.jpg"
                 />
-              </a>
+              </p>
             </div>
             <div className="lg:w-1/4 p-4 w-1/2">
-              <a className="block relative h-48 rounded overflow-hidden">
+              <p className="block relative h-48 rounded overflow-hidden">
                 <img
                   alt="ecommerce"
                   className="object-cover object-center w-full h-full block"
                   src="https://miro.medium.com/max/700/1*QPNTLjb_ZKr6a6nwv9gJQA.jpeg"
                 />
-              </a>
+              </p>
             </div>
           </div>
         </div>

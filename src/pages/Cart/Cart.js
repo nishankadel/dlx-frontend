@@ -1,13 +1,16 @@
 import axios from "axios";
+import KhaltiCheckout from "khalti-checkout-web";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../../components/Spinner/Spinner";
+// import config from "../../Khalti";
 
 const Cart = () => {
   const profile = JSON.parse(localStorage.getItem("user-profile"));
   const token = JSON.parse(localStorage.getItem("user-token"));
 
+  const cartProductId = [];
   const navigate = useNavigate();
 
   const [cart, setCart] = useState([]);
@@ -51,8 +54,6 @@ const Cart = () => {
         }
       )
       .then((res) => {
-        toast.success(res.data.message);
-        navigate("/cart");
         window.location.reload();
       })
       .catch((err) => {
@@ -144,6 +145,64 @@ const Cart = () => {
         setLoading(false);
       });
   };
+
+  // KHALTI INTEGRATION
+  let config = {
+    // replace this key with yours
+    publicKey: "test_public_key_424a6e1006d14b3f94a1eb2af5f24cc8",
+    productIdentity: "1234567890",
+    productName: "DLX",
+    productUrl: "http://localhost:3000",
+    eventHandler: {
+      onSuccess(payload) {
+        axios
+          .post(
+            "http://localhost:8000/api/product/order-history",
+            {
+              userId: profile._id,
+              amount: payload.amount,
+              token: payload.token,
+              cartProductId,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((res) => {
+            toast.success(res.data.message);
+            navigate("/all-products");
+            handleClearCart();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+      // onError handler is optional
+      onError(error) {
+        // handle errors
+        console.log(error);
+      },
+      onClose() {
+        console.log("widget is closing");
+      },
+    },
+    paymentPreference: [
+      "KHALTI",
+      "EBANKING",
+      "MOBILE_BANKING",
+      "CONNECT_IPS",
+      "SCT",
+    ],
+  };
+
+  var checkout = new KhaltiCheckout(config);
+
+  const handleKhaltiPayment = () => {
+    checkout.show({ amount: totalPrice * 100 });
+  };
+  // KHALTI INTEGRATION
   return (
     <>
       {loading && <Spinner />}
@@ -170,78 +229,90 @@ const Cart = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cart.map((c) => (
-                    <tr key={c._id}>
-                      <td className="hidden pb-4 md:table-cell">
-                        <Link to={`/single-product/${c.productId._id}`}>
-                          <img
-                            src={c.productId.image["url"]}
-                            className="w-20 rounded"
-                            alt="Thumbnail"
-                          />
-                        </Link>
-                      </td>
-                      <td>
-                        <Link to={`/single-product/${c.productId._id}`}>
-                          <p className="mb-2 md:ml-4"> {c.productId.name} </p>
-                        </Link>
+                  {cart.map(
+                    (c) => (
+                      cartProductId.push(c.productId._id),
+                      (
+                        <tr key={c._id}>
+                          <td className="hidden pb-4 md:table-cell">
+                            <Link to={`/single-product/${c.productId._id}`}>
+                              <img
+                                src={c.productId.image["url"]}
+                                className="w-20 rounded"
+                                alt="Thumbnail"
+                              />
+                            </Link>
+                          </td>
+                          <td>
+                            <Link to={`/single-product/${c.productId._id}`}>
+                              <p className="mb-2 md:ml-4">
+                                {" "}
+                                {c.productId.name}{" "}
+                              </p>
+                            </Link>
 
-                        <button
-                          onClick={() => {
-                            deleteFavorite(c.productId._id);
-                          }}
-                          type="submit"
-                          className="text-gray-700 md:ml-4 hover:text-red-700"
-                        >
-                          <small>
-                            <i className="fa-solid fa-trash-can text-2xl"></i>
-                          </small>
-                        </button>
-                      </td>
-                      <td className="justify-center md:justify-end md:flex mt-6">
-                        <div className="w-20 h-10">
-                          <div className="relative flex flex-row w-full h-8">
-                            {c.productId.stock <= 0 ? (
-                              <p className="text-red-700 ml-2">Out Of Stock</p>
-                            ) : (
-                              <div className="flex">
-                                {c.quantity !== 1 && (
-                                  <div
-                                    onClick={() => {
-                                      handleCartDecrease(c.productId._id);
-                                    }}
-                                  >
-                                    <i className="fa-solid fa-minus bg-blue-500 text-white p-1 rounded font-bold"></i>
+                            <button
+                              onClick={() => {
+                                deleteFavorite(c.productId._id);
+                              }}
+                              type="submit"
+                              className="text-gray-700 md:ml-4 hover:text-red-700"
+                            >
+                              <small>
+                                <i className="fa-solid fa-trash-can text-2xl"></i>
+                              </small>
+                            </button>
+                          </td>
+                          <td className="justify-center md:justify-end md:flex mt-6">
+                            <div className="w-20 h-10">
+                              <div className="relative flex flex-row w-full h-8">
+                                {c.productId.stock <= 0 ? (
+                                  <p className="text-red-700 ml-2">
+                                    Out Of Stock
+                                  </p>
+                                ) : (
+                                  <div className="flex">
+                                    {c.quantity !== 1 && (
+                                      <div
+                                        className="hover:cursor-pointer"
+                                        onClick={() => {
+                                          handleCartDecrease(c.productId._id);
+                                        }}
+                                      >
+                                        <i className="fa-solid fa-minus bg-blue-500 text-white p-1 rounded font-bold"></i>
+                                      </div>
+                                    )}
+                                    <p className="w-full pl-4 pr-4 font-semibold text-center focus:outline-none hover:text-black focus:text-black">
+                                      {c.quantity}
+                                    </p>
+
+                                    <div
+                                      className="hover:cursor-pointer"
+                                      onClick={() => {
+                                        handleCartIncrease(c.productId._id);
+                                      }}
+                                    >
+                                      <i className="fa-solid fa-plus bg-blue-500 text-white p-1 rounded font-bold"></i>
+                                    </div>
                                   </div>
                                 )}
-                                <p className="w-full pl-4 pr-4 font-semibold text-center focus:outline-none hover:text-black focus:text-black">
-                                  {c.quantity}
-                                </p>
-
-                                <div
-                                  onClick={() => {
-                                    handleCartIncrease(c.productId._id);
-                                  }}
-                                >
-                                  <i className="fa-solid fa-plus bg-blue-500 text-white p-1 rounded font-bold"></i>
-                                </div>
                               </div>
-                            )}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="hidden text-right md:table-cell">
-                        <span className="text-sm lg:text-base font-medium">
-                          Rs {c.unitPrice} /-
-                        </span>
-                      </td>
-                      <td className="text-right">
-                        <span className="text-sm lg:text-base font-medium">
-                          Rs {c.unitTotalPrice} /-
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                            </div>
+                          </td>
+                          <td className="hidden text-right md:table-cell">
+                            <span className="text-sm lg:text-base font-medium">
+                              Rs {c.unitPrice} /-
+                            </span>
+                          </td>
+                          <td className="text-right">
+                            <span className="text-sm lg:text-base font-medium">
+                              Rs {c.unitTotalPrice} /-
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    )
+                  )}
                 </tbody>
               </table>
               <hr className="pb-6 mt-6" />
@@ -256,6 +327,8 @@ const Cart = () => {
                     <button
                       onClick={() => {
                         handleClearCart();
+                        toast.success("Cart cleared successfully");
+                        navigate("/cart");
                       }}
                       type="submit"
                       className="relative bg-red-500 hover:bg-red-700 text-white mt-1 p-3 rounded font-bold overflow-hidden"
@@ -281,65 +354,26 @@ const Cart = () => {
                         </div>
                       </div>
                       <br />
-                      <form action="/product/cash-on-delivery" method="post">
-                        <button
-                          type="submit"
-                          className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none"
+                      <button
+                        type="submit"
+                        onClick={handleKhaltiPayment}
+                        className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          data-prefix="far"
+                          data-icon="credit-card"
+                          className="w-8"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 576 512"
                         >
-                          <svg
-                            aria-hidden="true"
-                            data-prefix="far"
-                            data-icon="credit-card"
-                            className="w-8"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 576 512"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"
-                            />
-                          </svg>
-                          <span className="ml-2 mt-5px">Cash On Delivery</span>
-                        </button>{" "}
-                        <button
-                          type="submit"
-                          className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            data-prefix="far"
-                            data-icon="credit-card"
-                            className="w-8"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 576 512"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"
-                            />
-                          </svg>
-                          <span className="ml-2 mt-5px">Cash On Delivery</span>
-                        </button>{" "}
-                        <button
-                          type="submit"
-                          className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            data-prefix="far"
-                            data-icon="credit-card"
-                            className="w-8"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 576 512"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"
-                            />
-                          </svg>
-                          <span className="ml-2 mt-5px">Cash On Delivery</span>
-                        </button>
-                      </form>
+                          <path
+                            fill="currentColor"
+                            d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"
+                          />
+                        </svg>
+                        <span className="ml-2 mt-5px">Pay with Khalti</span>
+                      </button>
                     </div>
                   </div>
                 </div>

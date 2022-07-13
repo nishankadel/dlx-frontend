@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Spinner from "../../components/Spinner/Spinner";
 import axios from "axios";
 import ReactGoogleLogin from "../../components/ReactGoogleLogin/ReactGoogleLogin";
+import baseUrl from "../../baseUrl";
 
 const Login = () => {
   const [email, setEmail] = useState("nishankadel39@gmail.com");
@@ -19,7 +20,7 @@ const Login = () => {
     if (email && password) {
       setLoading(true);
       axios
-        .post("http://localhost:8000/api/auth/login", {
+        .post(`${baseUrl}/auth/login`, {
           email,
           password,
         })
@@ -43,7 +44,6 @@ const Login = () => {
         });
     }
   };
-
   return (
     <>
       {loading && <Spinner />}
@@ -112,10 +112,7 @@ const Login = () => {
             <div className="flex items-center w-full mt-2">
               <div className="w-full md:w-1/3 px-3 pt-4 mx-2 border-t border-gray-400"></div>
               <div className="w-full md:w-1/3 px-3 pt-4 mx-2">
-               
-                
-                <ReactGoogleLogin/>
-
+                <ReactGoogleLogin />
               </div>
               <div className="w-full md:w-1/3 px-3 pt-4 mx-2 border-t border-gray-400"></div>
             </div>

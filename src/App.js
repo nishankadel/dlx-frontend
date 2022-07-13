@@ -16,6 +16,9 @@ import Register from "./pages/Register/Register";
 import Profile from "./pages/User/Profile";
 import Favorites from "./pages/Favorites/Favorites";
 import Cart from "./pages/Cart/Cart";
+import OrderHistory from "./pages/User/OrderHistory";
+import OrderDetails from "./pages/User/OrderDetails";
+import UpdateProfile from "./pages/User/UpdateProfile";
 
 const App = () => {
   return (
@@ -47,6 +50,9 @@ const App = () => {
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/favourites" element={<Favorites />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order-history" element={<OrderHistory />} />
+          <Route path="/order-details/:id" element={<OrderDetails />} />
+          <Route path="/update-profile" element={<UpdateProfile />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

@@ -3,14 +3,18 @@ import KhaltiCheckout from "khalti-checkout-web";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import baseUrl from "../../baseUrl";
 import Spinner from "../../components/Spinner/Spinner";
-// import config from "../../Khalti";
 
 const Cart = () => {
   const profile = JSON.parse(localStorage.getItem("user-profile"));
   const token = JSON.parse(localStorage.getItem("user-token"));
 
   const cartProductId = [];
+  const cartProductName = [];
+  const cartProductQuantity = [];
+  const cartProductPrice = [];
+
   const navigate = useNavigate();
 
   const [cart, setCart] = useState([]);
@@ -21,7 +25,7 @@ const Cart = () => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:8000/api/product/get-cart",
+        `${baseUrl}/product/get-cart`,
         { userId: profile._id },
         {
           headers: {
@@ -45,7 +49,7 @@ const Cart = () => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:8000/api/product/clear-cart",
+        `${baseUrl}/product/clear-cart`,
         { userId: profile._id },
         {
           headers: {
@@ -68,7 +72,7 @@ const Cart = () => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:8000/api/product/increase-cart",
+        `${baseUrl}/product/increase-cart`,
         { userId: profile._id, productId: id },
         {
           headers: {
@@ -92,11 +96,12 @@ const Cart = () => {
         setLoading(false);
       });
   };
+
   const handleCartDecrease = async (id) => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:8000/api/product/decrease-cart",
+        `${baseUrl}/product/decrease-cart`,
         { userId: profile._id, productId: id },
         {
           headers: {
@@ -125,7 +130,7 @@ const Cart = () => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:8000/api/product/delete-cart",
+        `${baseUrl}/product/delete-cart`,
         { id: id, userId: profile._id },
         {
           headers: {
@@ -157,12 +162,18 @@ const Cart = () => {
       onSuccess(payload) {
         axios
           .post(
-            "http://localhost:8000/api/product/order-history",
+            `${baseUrl}/product/buy-product`,
             {
               userId: profile._id,
               amount: payload.amount,
               token: payload.token,
+              totalPrice,
               cartProductId,
+              email: profile.email,
+              fullname: profile.fullname,
+              cartProductName,
+              cartProductQuantity,
+              cartProductPrice,
             },
             {
               headers: {
@@ -232,6 +243,9 @@ const Cart = () => {
                   {cart.map(
                     (c) => (
                       cartProductId.push(c.productId._id),
+                      cartProductName.push(c.productId.name),
+                      cartProductQuantity.push(c.quantity),
+                      cartProductPrice.push(c.productId.unitPrice),
                       (
                         <tr key={c._id}>
                           <td className="hidden pb-4 md:table-cell">

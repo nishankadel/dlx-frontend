@@ -1,6 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import baseUrl from "../../baseUrl";
 import BlogCard from "../../components/BlogCard/BlogCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Spinner from "../../components/Spinner/Spinner";
@@ -17,7 +18,7 @@ const AllBlogs = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:8000/api/blog/all-blogs?page=${pageNumber}`)
+      .get(`${baseUrl}/blog/all-blogs?page=${pageNumber}`)
       .then((res) => {
         setBlogs(res.data.blogs);
         setTotalPages(res.data.totalPages);

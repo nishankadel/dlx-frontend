@@ -1,17 +1,44 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Spinner from "../../components/Spinner/Spinner";
+import baseUrl from "../../baseUrl";
 
 const Contact = () => {
   const [feedback, setFeedback] = useState("");
   const profile = JSON.parse(localStorage.getItem("user-profile"));
+  const token = JSON.parse(localStorage.getItem("user-token"));
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    if (profile) {
+    if (profile && token) {
       e.preventDefault();
-      console.log(feedback);
+
+      setLoading(true);
+      axios
+        .post(
+          `${baseUrl}/user/feedback`,
+          { name: profile.fullname, email: profile.email, message: feedback },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          if (res.data.success === true) {
+            toast.success("Feedback sent successfully");
+            navigate("/contact");
+            setFeedback("");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
       toast.error("Please login to submit feedback");
       navigate("/auth/login");
@@ -20,6 +47,7 @@ const Contact = () => {
 
   return (
     <>
+      {loading && <Spinner />}
       <div className="relative flex items-top justify-center mt-10 bg-white sm:items-center sm:pt-0">
         <div className="max-w-6xl mx-auto sm:px-6 lg:px-2">
           <div className="mt-8 overflow-hidden">

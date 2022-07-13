@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import baseUrl from "../../baseUrl";
 
 const AddToCart = ({ productId, navTo }) => {
   const profile = JSON.parse(localStorage.getItem("user-profile"));
@@ -13,7 +14,7 @@ const AddToCart = ({ productId, navTo }) => {
     if (profile) {
       axios
         .post(
-          `http://localhost:8000/api/product/add-to-cart`,
+          `${baseUrl}/product/add-to-cart`,
           { productId, userId: profile._id },
           {
             headers: {

@@ -5,6 +5,7 @@ import AuthField from "../../components/AuthComponent/AuthField";
 import { toast } from "react-toastify";
 import Spinner from "../../components/Spinner/Spinner";
 import axios from "axios";
+import baseUrl from "../../baseUrl";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -15,6 +16,7 @@ const Register = () => {
   const [confirmpassword, setConfirmpassword] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,7 +33,7 @@ const Register = () => {
       gender
     ) {
       axios
-        .post("http://localhost:8000/api/auth/register", {
+        .post(`${baseUrl}/auth/register`, {
           fullname,
           email,
           phonenumber,
@@ -42,6 +44,7 @@ const Register = () => {
           gender,
         })
         .then((res) => {
+          setLoading(true);
           if (res.data.success === true) {
             localStorage.setItem("user-token", JSON.stringify(res.data.token));
             localStorage.setItem("user-profile", JSON.stringify(res.data.user));
@@ -55,12 +58,16 @@ const Register = () => {
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   };
 
   return (
     <>
+      {loading && <Spinner />}
       <div className="text-center mt-5">
         <div className="flex items-center justify-center">
           <Link to="/">

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import baseUrl from "../../baseUrl";
 import BlogCard from "../BlogCard/BlogCard";
 import ProductCard from "../ProductCard/ProductCard";
 
@@ -9,14 +10,14 @@ const SearchBar = ({ router, SearchedBar }) => {
 
   useEffect(() => {
     axios
-      .post(`http://localhost:8000/api/${router}/search`, { searchText })
+      .post(`${baseUrl}/${router}/search`, { searchText })
       .then((res) => {
         setSearchedItems(res.data.results);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [searchText]);
+  }, [searchText, router]);
 
   return (
     <>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import baseUrl from "../../baseUrl";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Spinner from "../Spinner/Spinner";
 
@@ -11,7 +12,7 @@ const ShowCaseProducts = ({ title }) => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:8000/api/product/get-showcase-products")
+      .get(`${baseUrl}/product/get-showcase-products`)
       .then((res) => {
         setShowProduct(res.data.products);
       })

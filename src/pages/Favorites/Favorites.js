@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import baseUrl from "../../baseUrl";
 import AddToCart from "../../components/AddToCart/AddToCart";
 import Spinner from "../../components/Spinner/Spinner";
 
@@ -17,7 +18,7 @@ const Favorites = () => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:8000/api/product/get-favorites",
+        `${baseUrl}/product/get-favorites`,
         { userId: profile._id },
         {
           headers: {
@@ -26,6 +27,7 @@ const Favorites = () => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setFavorites(res.data.favorites.favorite);
       })
       .catch((err) => {
@@ -40,7 +42,7 @@ const Favorites = () => {
     setLoading(true);
     axios
       .post(
-        "http://localhost:8000/api/product/delete-favorite",
+        `${baseUrl}/product/delete-favorite`,
         { id: id, userId: profile._id },
         {
           headers: {
@@ -72,6 +74,7 @@ const Favorites = () => {
                   <tr className="h-12 uppercase">
                     <th className="hidden md:table-cell"></th>
                     <th className="text-left">Products</th>
+                    <th className="text-left">Unit Price</th>
                     <th className="text-right">Action</th>
                   </tr>
                 </thead>
@@ -106,6 +109,9 @@ const Favorites = () => {
                             <i className="fa-solid fa-trash-can text-2xl"></i>
                           </small>
                         </button>
+                      </td>
+                      <td className="hidden pb-4 md:table-cell">
+                        {favorite.productId.price}
                       </td>
                       <td className="text-right">
                         {/* if stock xaena vane loop  */}

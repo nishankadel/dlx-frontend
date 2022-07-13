@@ -1,8 +1,9 @@
 import axios from "axios";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../Spinner/Spinner";
+import baseUrl from "../../baseUrl";
 
 const AddComment = ({ id, nav }) => {
   const token = JSON.parse(localStorage.getItem("user-token"));
@@ -15,7 +16,7 @@ const AddComment = ({ id, nav }) => {
     setLoading(true);
     axios
       .post(
-        `http://localhost:8000/api/comment/add-comment/${String(id)}`,
+        `${baseUrl}/comment/add-comment/${String(id)}`,
         { comment },
         {
           headers: {

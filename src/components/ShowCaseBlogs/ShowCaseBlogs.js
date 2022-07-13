@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import BlogCard from "../BlogCard/BlogCard";
 import Spinner from "../Spinner/Spinner";
+import baseUrl from "../../baseUrl";
 
 const ShowCaseBlogs = ({ title }) => {
   const [showBlogs, setShowBlogs] = useState([]);
@@ -11,7 +12,7 @@ const ShowCaseBlogs = ({ title }) => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:8000/api/blog/get-showcase-blogs")
+      .get(`${baseUrl}/blog/get-showcase-blogs`)
       .then((res) => {
         setShowBlogs(res.data.blogs);
       })

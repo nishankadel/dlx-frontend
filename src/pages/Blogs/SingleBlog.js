@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import baseUrl from "../../baseUrl";
 import AddComment from "../../components/AddComment/AddComment";
 import CommentList from "../../components/CommentList/CommentList";
 import ShowCaseBlogs from "../../components/ShowCaseBlogs/ShowCaseBlogs";
@@ -18,18 +19,16 @@ const SingleBlog = () => {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/api/blog/single-blog/${id}`)
-      .then((res) => {
-        setBlog(res.data.blog);
-        setImage(res.data.image);
-      });
+    axios.get(`${baseUrl}/blog/single-blog/${id}`).then((res) => {
+      setBlog(res.data.blog);
+      setImage(res.data.image);
+    });
   }, [id]);
 
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:8000/api/comment/get-comment/${id}`)
+      .get(`${baseUrl}/comment/get-comment/${id}`)
       .then((res) => {
         setComments(res.data.comments);
       })

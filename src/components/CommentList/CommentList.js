@@ -3,13 +3,14 @@ import moment from "moment";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import baseUrl from "../../baseUrl";
 
 const CommentList = ({ comment, Id, token, profile, nav }) => {
   const navigate = useNavigate();
   const deleteComment = (id) => {
     axios
       .post(
-        `http://localhost:8000/api/comment/delete-comment/${Id}`,
+        `${baseUrl}/comment/delete-comment/${Id}`,
         {
           commentId: id,
         },

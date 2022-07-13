@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import baseUrl from "../../baseUrl";
 
 const AddToFavorite = ({ productId, navTo }) => {
   const profile = JSON.parse(localStorage.getItem("user-profile"));
@@ -12,7 +13,7 @@ const AddToFavorite = ({ productId, navTo }) => {
     if (profile) {
       axios
         .post(
-          `http://localhost:8000/api/product/add-to-favorite`,
+          `${baseUrl}/product/add-to-favorite`,
           { productId, userId: profile._id },
           {
             headers: {

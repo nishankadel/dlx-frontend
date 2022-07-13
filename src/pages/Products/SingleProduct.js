@@ -3,6 +3,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddComment from "../../components/AddComment/AddComment";
+import AddToCart from "../../components/AddToCart/AddToCart";
 import AddToFavorite from "../../components/AddToFavorite/AddToFavorite";
 import CommentList from "../../components/CommentList/CommentList";
 import ShowCaseProducts from "../../components/ShowCaseProducts/ShowCaseProducts";
@@ -89,13 +90,8 @@ const SingleProduct = () => {
                       productId={id}
                     />
                   </div>
-                  <div>
-                    <button
-                      type="submit"
-                      className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4 hover:bg-blue-700 hover:text-white"
-                    >
-                      <i className="fa-solid fa-cart-plus"></i>
-                    </button>
+                  <div className="mt-3 ml-2">
+                    <AddToCart navTo={`/single-product/${id}`} productId={id} />
                   </div>
                 </div>
               </div>

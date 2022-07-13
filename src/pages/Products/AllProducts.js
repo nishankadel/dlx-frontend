@@ -4,6 +4,7 @@ import ProductCard from "../../components/ProductCard/ProductCard";
 import Spinner from "../../components/Spinner/Spinner";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import baseUrl from "../../baseUrl";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ const AllProducts = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:8000/api/product/all-products?page=${pageNumber}`)
+      .get(`${baseUrl}/product/all-products?page=${pageNumber}`)
       .then((res) => {
         setProducts(res.data.products);
         setTotalPages(res.data.totalPages);

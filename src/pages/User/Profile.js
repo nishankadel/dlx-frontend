@@ -4,6 +4,7 @@ import moment from "moment";
 import Login from "../../pages/Login/Login";
 import Spinner from "../../components/Spinner/Spinner";
 import axios from "axios";
+import baseUrl from "../../baseUrl";
 
 const Profile = () => {
   const token = JSON.parse(localStorage.getItem("user-token"));
@@ -13,7 +14,7 @@ const Profile = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:8000/api/user/profile", {
+      .get(`${baseUrl}/user/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -27,7 +28,7 @@ const Profile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [token]);
   return (
     <>
       {loading && <Spinner />}
@@ -39,12 +40,18 @@ const Profile = () => {
                 <span className="text-xl font-semibold block">
                   {userInfo.userType} Profile
                 </span>
-                <a
-                  href="/user/edit-profile"
+                <Link
+                  to="/update-profile"
                   className="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800"
                 >
                   Edit
-                </a>
+                </Link>
+                <Link
+                  to="/change-password"
+                  className="-mt-2 text-md font-bold text-white bg-red-700 rounded-full px-5 py-2 hover:bg-red-800"
+                >
+                  Change Password
+                </Link>
               </div>
               <div className="w-full p-8 mx-2 flex justify-center">
                 <img
@@ -60,8 +67,8 @@ const Profile = () => {
                 />
               </div>
               <Link
-                to="/"
-                className="-mt-2 text-md font-bold text-white bg-green-700 rounded-full px-5 py-2 hover:bg-green-800"
+                to="/order-history"
+                className="-mt-2 text-md font-bold text-white bg-green-700 rounded-full px-5 mr-3 py-2 hover:bg-green-800"
               >
                 Order History
               </Link>
@@ -82,13 +89,9 @@ const Profile = () => {
                     Full Name
                   </label>
                   <div className="flex">
-                    <input
-                      disabled
-                      id="username"
-                      className="border-1 rounded-r px-4 py-2 w-full"
-                      type="text"
-                      value={userInfo.fullname}
-                    />
+                    <p className="border-1 rounded-r px-4 py-2 w-full">
+                      {userInfo.fullname}
+                    </p>
                   </div>
                 </div>
                 <div className="pb-4">
@@ -98,13 +101,9 @@ const Profile = () => {
                   >
                     Email
                   </label>
-                  <input
-                    disabled
-                    id="email"
-                    className="border-1 rounded-r px-4 py-2 w-full"
-                    type="email"
-                    value={userInfo.email}
-                  />
+                  <p className="border-1 rounded-r px-4 py-2 w-full">
+                    {userInfo.email}
+                  </p>
                 </div>
                 <div className="pb-6">
                   <label
@@ -114,13 +113,9 @@ const Profile = () => {
                     Phone Number
                   </label>
                   <div className="flex">
-                    <input
-                      disabled
-                      id="username"
-                      className="border-1 rounded-r px-4 py-2 w-full"
-                      type="text"
-                      value={userInfo.phonenumber}
-                    />
+                    <p className="border-1 rounded-r px-4 py-2 w-full">
+                      +977-{userInfo.phonenumber}
+                    </p>
                   </div>
                 </div>
                 <div className="pb-6">
@@ -131,13 +126,9 @@ const Profile = () => {
                     Address
                   </label>
                   <div className="flex">
-                    <input
-                      disabled
-                      id="username"
-                      className="border-1 rounded-r px-4 py-2 w-full"
-                      type="text"
-                      value={userInfo.fulladdress}
-                    />
+                    <p className="border-1 rounded-r px-4 py-2 w-full">
+                      {userInfo.fulladdress}
+                    </p>
                   </div>
                 </div>
                 <div className="pb-6">
@@ -148,13 +139,9 @@ const Profile = () => {
                     Date of Birth
                   </label>
                   <div className="flex">
-                    <input
-                      disabled
-                      id="username"
-                      className="border-1 rounded-r px-4 py-2 w-full"
-                      type="text"
-                      value={userInfo.dob}
-                    />
+                    <p className="border-1 rounded-r px-4 py-2 w-full">
+                      {userInfo.dob}
+                    </p>
                   </div>
                 </div>
                 <div className="pb-6">
@@ -165,13 +152,9 @@ const Profile = () => {
                     Gender
                   </label>
                   <div className="flex">
-                    <input
-                      disabled
-                      id="username"
-                      className="border-1 rounded-r px-4 py-2 w-full"
-                      type="text"
-                      value={userInfo.gender}
-                    />
+                    <p className="border-1 rounded-r px-4 py-2 w-full">
+                      {userInfo.gender}
+                    </p>
                   </div>
                 </div>
                 <div className="pb-6">
@@ -182,13 +165,9 @@ const Profile = () => {
                     Profile Created At
                   </label>
                   <div className="flex">
-                    <input
-                      disabled
-                      id="username"
-                      className="border-1 rounded-r px-4 py-2 w-full"
-                      type="text"
-                      value={moment(userInfo.createdAt).fromNow()}
-                    />
+                    <p className="border-1 rounded-r px-4 py-2 w-full">
+                      {moment(userInfo.createdAt).fromNow()}
+                    </p>
                   </div>
                 </div>
               </div>

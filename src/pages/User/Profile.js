@@ -34,12 +34,13 @@ const Profile = () => {
       {loading && <Spinner />}
       {token && userInfo ? (
         <div className="h-full mt-5">
+          {" "}
+          <span className="text-xl ml-5 font-semibold block">
+            {userInfo.userType} Profile
+          </span>
           <div className="border-b-2 block md:flex">
             <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
               <div className="flex justify-between">
-                <span className="text-xl font-semibold block">
-                  {userInfo.userType} Profile
-                </span>
                 <Link
                   to="/update-profile"
                   className="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800"
@@ -55,6 +56,7 @@ const Profile = () => {
               </div>
               <div className="w-full p-8 mx-2 flex justify-center">
                 <img
+                  
                   id="showImage"
                   className="items-center border"
                   style={{

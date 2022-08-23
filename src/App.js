@@ -19,6 +19,9 @@ import Cart from "./pages/Cart/Cart";
 import OrderHistory from "./pages/User/OrderHistory";
 import OrderDetails from "./pages/User/OrderDetails";
 import UpdateProfile from "./pages/User/UpdateProfile";
+import ChangePassword from "./pages/User/ChangePassword";
+import Features from "./pages/Features/Features";
+import LabTest from "./pages/Features/LabTest";
 
 const App = () => {
   return (
@@ -53,6 +56,9 @@ const App = () => {
           <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/order-details/:id" element={<OrderDetails />} />
           <Route path="/update-profile" element={<UpdateProfile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/features/lab-test" element={<LabTest />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

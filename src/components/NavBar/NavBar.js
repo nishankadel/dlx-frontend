@@ -74,18 +74,18 @@ const NavBar = () => {
                         Blogs
                       </Link>
                       <Link
-                        to="/about"
-                        className=" text-white hover:bg-gray-700 hover:text-white
-                          px-3 py-2 rounded-md text-sm font-medium"
-                      >
-                        About
-                      </Link>
-                      <Link
                         to="/features"
                         className=" text-white hover:bg-gray-700 hover:text-white
                           px-3 py-2 rounded-md text-sm font-medium"
                       >
                         Features
+                      </Link>
+                      <Link
+                        to="/about"
+                        className=" text-white hover:bg-gray-700 hover:text-white
+                          px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        About
                       </Link>
 
                       <Link
@@ -215,20 +215,19 @@ const NavBar = () => {
                   Blogs
                 </Link>
                 <Link
-                  to="/about"
-                  className=" text-white hover:bg-gray-700 hover:text-white
-                          px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  About
-                </Link>
-                <Link
                   to="/features"
                   className=" text-white hover:bg-gray-700 hover:text-white
                           px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Features
                 </Link>
-
+                <Link
+                  to="/about"
+                  className=" text-white hover:bg-gray-700 hover:text-white
+                          px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  About
+                </Link>
                 <Link
                   to="/contact"
                   className=" text-white hover:bg-gray-700 hover:text-white

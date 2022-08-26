@@ -22,6 +22,8 @@ import UpdateProfile from "./pages/User/UpdateProfile";
 import ChangePassword from "./pages/User/ChangePassword";
 import Features from "./pages/Features/Features";
 import LabTest from "./pages/Features/LabTest";
+import MedicineRequest from "./pages/Features/MedicineRequest";
+import EPrescription from "./pages/Features/EPrescription";
 
 const App = () => {
   return (
@@ -59,6 +61,11 @@ const App = () => {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/features" element={<Features />} />
           <Route path="/features/lab-test" element={<LabTest />} />
+          <Route
+            path="/features/medicine-request"
+            element={<MedicineRequest />}
+          />
+          <Route path="/features/e-prescription" element={<EPrescription />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
